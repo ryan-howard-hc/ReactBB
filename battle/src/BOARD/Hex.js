@@ -28,12 +28,12 @@ const HexBoard = () => {
     );
   };
 
-  let hexagons = times(102, (id) => id);
+  let hexagons = times(198, (id) => id);
 
   return (
     <HexagonGrid
-      gridWidth={500}
-      gridHeight={500}
+      gridWidth={1800}
+      gridHeight={1000}
       hexagons={hexagons}
       hexProps={getHexProps}
       renderHexagonContent={renderHexagonContent}
