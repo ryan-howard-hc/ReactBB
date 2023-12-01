@@ -6,6 +6,7 @@ import times from "lodash/times";
 import Hexagon from "react-hexagon";
 
 const getGridDimensions = (gridWidth, gridHeight, N) => {
+    //calculates the number of columns and rows needed to accommodate N hexagons within a grid of specified gridWidth and gridHeight
   const a = (5 * gridHeight) / (gridWidth * Math.sqrt(2));
   const b = gridHeight / (2 * gridWidth) - 2;
 
@@ -24,10 +25,13 @@ const getGridDimensions = (gridWidth, gridHeight, N) => {
 };
 
 const tryInvoke = (func, params = [], defaultValue = null) => {
+    //allows for the safe invocation of functions (func) with provided parameters (params). 
+    // If the provided function is not callable, it returns a default value (defaultValue)
   return isFunction(func) ? func(...params) : defaultValue;
 };
 
 const HexagonGrid = (props) => {
+    
   const {
     hexagons,
     gridHeight,
@@ -53,6 +57,7 @@ const HexagonGrid = (props) => {
   }, [hexagons, gridWidth, gridHeight]);
 
   const getHexDimensions = (row, col) => {
+    //calculates the dimensions (width, height, x-position) of each hexagon within the grid based on its row and column position.
     const dimensions = {
       width: `${state.hexWidth}px`,
       height: `${state.hexHeight}px`,
@@ -65,6 +70,7 @@ const HexagonGrid = (props) => {
   };
 
   const getRowDimensions = (row) => {
+    //calculates the dimensions (y-position, height, width) of each row in the grid based on the row number.
     const dimensions = {
       y: `${row * (state.hexSize * (Math.sqrt(3) / 2))}px`,
       height: `${state.hexHeight}px`,
@@ -77,7 +83,7 @@ const HexagonGrid = (props) => {
   };
 
   return (
-    <svg width={gridWidth} height={gridHeight} x={x} y={y}>
+    <svg width={gridWidth} height={gridHeight} x={x} y={y} style={{ transform: "perspective(1200px) rotateX(50deg)" }}>
       {times(state.rows, (row) => {
         const remaining = hexagons.length - row * state.columns;
         const columns = remaining < state.columns ? remaining : state.columns;
@@ -88,6 +94,7 @@ const HexagonGrid = (props) => {
             width={rowDim.width}
             height={rowDim.height}
             y={rowDim.y}
+            style={{ transform: "perspective(600px) rotateX(60deg)" }}
           >
             {times(columns, (col) => {
               const iHexagon = row * state.columns + col;
@@ -100,6 +107,7 @@ const HexagonGrid = (props) => {
                   height={hexDim.height}
                   width={hexDim.width}
                   x={`${hexDim.x}px`}
+                  style={{ transform: "perspective(600px) rotateX(60deg)" }}
                 >
                   <Hexagon {..._hexProps} flatTop>
                     {tryInvoke(renderHexagonContent, [hexagon], <tspan />)}
