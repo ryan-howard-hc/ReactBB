@@ -32,6 +32,7 @@ const tryInvoke = (func, params = [], defaultValue = null) => {
 
 const HexagonGrid = (props) => {
     
+    
   const {
     hexagons,
     gridHeight,
@@ -83,7 +84,10 @@ const HexagonGrid = (props) => {
   };
 
   return (
-    <svg width={gridWidth} height={gridHeight} x={x} y={y} style={{ transform: "perspective(1200px) rotateX(50deg)" }}>
+    <svg width={gridWidth} height={gridHeight} x={x} y={y}   style={{
+        transform: `perspective(1200px) rotateX(50deg) translateX(${(window.innerWidth - gridWidth) / 2}px)`, //  x translation for horizontal centering
+        marginLeft: '150px'
+      }}>
       {times(state.rows, (row) => {
         const remaining = hexagons.length - row * state.columns;
         const columns = remaining < state.columns ? remaining : state.columns;
