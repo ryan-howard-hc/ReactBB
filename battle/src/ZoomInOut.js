@@ -10,13 +10,18 @@ const ZoomableContent = ({ children }) => {
   const contentRef = useRef(null);
 
   const zoomFactor = 0.005; // control the zoom rate
+  const screenWidth = window.innerWidth;
+  const screenHeight = window.innerHeight;
+  const maxZoomLevel = Math.max(screenWidth, screenHeight) / screenWidth;
 
   const handleWheel = (event) => {
     event.preventDefault(); // prevents default scrolling behavior
-
+  
     setZoomLevel((prevZoomLevel) => {
       const newZoomLevel = prevZoomLevel - event.deltaY * zoomFactor;
-      return Math.max(minZoomLevel, newZoomLevel); // Restrict zoom level to the minimum value
+  
+      // limits the zoom-out level to the default view (1x)
+      return Math.max(1, newZoomLevel);
     });
   };
 
@@ -26,21 +31,23 @@ const ZoomableContent = ({ children }) => {
     setPrevY(event.clientY);
   };
 
-  const handleMouseUp = () => {
-    setIsDragging(false);
+  const handleMouseMove = (event) => {
+    if (isDragging && contentRef.current !== null) {
+      const deltaX = event.clientX - prevX;
+      const deltaY = event.clientY - prevY;
+
+      contentRef.current.scrollLeft -= deltaX / zoomLevel;
+      contentRef.current.scrollTop -= deltaY / zoomLevel;
+
+      setPrevX(event.clientX);
+      setPrevY(event.clientY);
+    }
   };
 
-  const handleMouseMove = (event) => {
-    if (!isDragging) return;
-
-    const deltaX = event.clientX - prevX;
-    const deltaY = event.clientY - prevY;
-
-    contentRef.current.scrollLeft -= deltaX;
-    contentRef.current.scrollTop -= deltaY;
-
-    setPrevX(event.clientX);
-    setPrevY(event.clientY);
+  const handleMouseUp = () => {
+    setIsDragging(false);
+    setPrevX(0);
+    setPrevY(0);
   };
 
   return (
@@ -54,8 +61,9 @@ const ZoomableContent = ({ children }) => {
       }}
       onWheel={handleWheel}
       onMouseDown={handleMouseDown}
-      onMouseUp={handleMouseUp}
       onMouseMove={handleMouseMove}
+      onMouseUp={handleMouseUp}
+      onMouseLeave={handleMouseUp}
       ref={contentRef}
     >
       {children}
