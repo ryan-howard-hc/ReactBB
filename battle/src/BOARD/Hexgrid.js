@@ -31,8 +31,6 @@ const tryInvoke = (func, params = [], defaultValue = null) => {
 };
 
 const HexagonGrid = (props) => {
-    
-    
   const {
     hexagons,
     gridHeight,
@@ -40,7 +38,7 @@ const HexagonGrid = (props) => {
     renderHexagonContent,
     hexProps,
     x,
-    y
+    y,
   } = props;
 
   const [state, setState] = useState({
@@ -48,7 +46,7 @@ const HexagonGrid = (props) => {
     hexSize: 1,
     hexWidth: 1,
     hexHeight: 1,
-    rows: 0
+    rows: 0,
   });
 
   useEffect(() => {
@@ -98,7 +96,6 @@ const HexagonGrid = (props) => {
             width={rowDim.width}
             height={rowDim.height}
             y={rowDim.y}
-            style={{ transform: "perspective(600px) rotateX(60deg)" }}
           >
             {times(columns, (col) => {
               const iHexagon = row * state.columns + col;
@@ -111,9 +108,16 @@ const HexagonGrid = (props) => {
                   height={hexDim.height}
                   width={hexDim.width}
                   x={`${hexDim.x}px`}
-                  style={{ transform: "perspective(600px) rotateX(60deg)" }}
                 >
                   <Hexagon {..._hexProps} flatTop>
+                    {/* image inside the Hexagon */}
+                    <image
+                      href={_hexProps.imageUrl} 
+                      x="0"
+                      y="0"
+                      width="100%"
+                      height="100%"
+                    />
                     {tryInvoke(renderHexagonContent, [hexagon], <tspan />)}
                   </Hexagon>
                 </svg>
