@@ -1,15 +1,18 @@
 import React from "react";
 import HexagonGrid from "./Hexgrid.js";
 import times from "lodash/times";
+// import HexagonImage from "./HexagonImage.js"; 
 
 const HexBoard = () => {
   const getHexProps = (hexagon) => {
+    const imageUrl = "https://opengameart.org/sites/default/files/grass_15.png"; 
     return {
       style: {
         fill: "#007aff",
-        stroke: "white"
+        stroke: "white",
       },
-      onClick: () => alert(`Hexagon n.${hexagon} has been clicked`)
+      onClick: () => alert(`Hexagon n.${hexagon} has been clicked`),
+      imageUrl: imageUrl, 
     };
   };
 
